@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mindfullness Chime</title>
+  <script>
+let config = { 
+  chimes : [{
+    interval : 2,
+    interval_type : "standard",
+    ding : ""
+  }]
+}
+
+let intervals = []
+
+function nextMatchingSecond(interval){ // interval is in minutes
+  var now = new Date();
+  var minutes = now.getMinutes();
+  var minutesToNextChime = minutes % interval;
+  if(minutesToNextChime == 0){
+    minutesToNextChime = interval;
+  }
+  var seconds = now.getSeconds();
+  var nextMatchingSecond = minutesToNextChime * 60 - seconds;
+  return nextMatchingSecond;
+}
+
+var blinkTab = function(message, times) {
+  var counter = 0;
+  times = times || 5;
+  var oldTitle = document.title,                                                           /* save original title */
+    timeoutId,
+    blink = function() { 
+      counter++;
+      if(counter > 10) {
+        clear();
+      } 
+      document.title = document.title == message ? ' ' : message; 
+    },  /* function to BLINK browser tab */
+    clear = function() {                                                                 /* function to set title back to original */
+      clearInterval(timeoutId);
+      document.title = oldTitle;
+      window.onmousemove = null;
+      timeoutId = null;
+    };
+
+  if (!timeoutId) {
+    timeoutId = setInterval(blink, 1000);
+  }
+  window.onmousemove = clear;                                                            /* stop changing title on moving the mouse */
+};
+
+function playDing(type){
+  console.log("ding " + new Date())
+  blinkTab("Hey", 5);
+}
+
+function clearTimers(){
+  intervals.forEach(function (interval){
+    clearTimeout(interval.firstChime);
+    clearInterval(interval.repeater);
+  });
+  intervals = []
+}
+
+function startTimers() { 
+  clearTimers();
+  config.chimes.forEach(function(chime){
+    if(chime.interval_type == "standard") {
+      var secondsToFirstChime = nextMatchingSecond(chime.interval);
+      var text = "Every " + chime.interval + " minutes";
+      var firstChimeTimeout = setTimeout(function() { 
+        playDing(chime.ding);
+        var subsequentChimesInterval = setInterval(function() { 
+            playDing(chime.ding);      
+        }, chime.interval * 60 * 1000);
+        intervals.push({ firstChime : firstChimeTimeout, repeater : subsequentChimesInterval });
+      }, secondsToFirstChime * 1000);
+    }
+  });
+}
+
+startTimers();
+  </script>
+</head>
+<body>
+     
+</body>
+</html>
