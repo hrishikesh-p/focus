@@ -1,20 +1,3 @@
-let intervals = []
-
-function nextMatchingSecond(interval){ // interval is in minutes
-  var now = new Date();
-  console.log("now " + now);
-  var minutes = now.getMinutes();
-  console.log("minutes " + minutes);
-  var minutesToNextChime = interval - (minutes % interval);
-  if(minutesToNextChime == 0){
-    minutesToNextChime = interval;
-  }
-  console.log("minutesToNextChime " + minutesToNextChime);
-  var seconds = now.getSeconds();
-  var nextMatchingSecond = minutesToNextChime * 60 - seconds;
-  console.log("nextMatchingSecond " + nextMatchingSecond);
-  return nextMatchingSecond;
-}
 
 var blinkTab = function(message, times) {
   var counter = 0;
@@ -40,14 +23,6 @@ var blinkTab = function(message, times) {
   }
   window.onmousemove = clear;
 };
-
-function playDing(ding){
-  console.log("ding " + new Date())
-  blinkTab("Breathe", 5);
-  ding.audioElem.play();
-  chimeAlert("Breathe");
-  notify("Breathe");
-}
 
 
 function notify(msg) {
@@ -92,43 +67,99 @@ function chimeAlert(text){
   }, 5000);
 }
 
-setTimeout(function() {
-  chimeAlert("test");
-}, 2000);
-
-function clearTimers(){
-  intervals.forEach(function (interval){
-    clearTimeout(interval.firstChime);
-    clearInterval(interval.repeater);
-  });
-  intervals = []
+function initAudio(chime) {
+  var ding = chime.ding;
+  var audioElemId  = "audio-" + ding.sound_key;
+  var audioElem = document.getElementById(audioElemId);
+  if(!audioElem){
+    console.log("sound missing " + audioElemId);
+    audioElem = document.createElement("audio");
+    audioElem.id = audioElemId;
+    audioElem.src = "sounds/" + ding.sound_key +".ogg";
+  }
+  return audioElem;
 }
 
-function initChime(chime) { 
-  var ding = chime.ding;
-  if(ding.type == "sound"){
-    var audioElem = document.createElement("audio");
-    audioElem.src = config.sounds[ding.sound_key];
-    chime.ding.audioElem = audioElem;
+function createChime(name, interval, ding, interval_type){
+  interval_type = interval_type || "standard" ;
+  ding = ding || config.default_ding;
+  Chimer.add({
+    name: name,
+    interval : interval,
+    interval_type : interval_type, 
+    ding : ding
+  });
+}
+
+function displayActiveTimers(chimes){
+  var activeChimesElem = document.getElementById("active-chimes");
+  activeChimesElem.innerHTML = "";
+  chimes.forEach(function(chime){
+    var chimeContainer = document.createElement("div");
+    chimeContainer.className = "chime-desc-container"; 
+    var chimeText = document.createElement("span");
+    chimeText.className = "chime-desc"; 
+    chimeText.innerHTML = chimeDesription(chime);
+    var chimeRemove = document.createElement("a");
+    chimeRemove.onclick = function() {
+      Chimer.remove(chime);
+    }
+    chimeRemove.innerHTML = "&#10007;";
+    chimeContainer.appendChild(chimeText);
+    chimeContainer.appendChild(chimeRemove);
+    activeChimesElem.appendChild(chimeContainer);
+  });
+}
+
+function chimeDesription(chime){
+  var desc = chime.name || "" ;
+  desc += " - " ; 
+  desc += " Every " + chime.interval + " mins";
+  return desc;
+}
+
+function setUpSounds(){
+   var soundSelectElem = document.getElementById("chime-sound-key");
+   config.sounds.forEach(function(soundName){
+      var soundOptionElem = document.createElement("option");
+     soundOptionElem.value = soundName;
+     soundOptionElem.innerHTML = soundName;
+     soundSelectElem.appendChild(soundOptionElem);
+   });
+}
+
+function setUpInterval(){
+  var intervalSelectElem = document.getElementById("chime-interval");
+  for (var i = 1 ; i <= 60 ; i++ ) {
+    if(60 % i == 0 ){
+      var intervalOptionElem = document.createElement("option");
+      intervalOptionElem.value = i;
+      intervalOptionElem.innerHTML = i + " mins";
+      intervalSelectElem.appendChild(intervalOptionElem);
+    }
   }
 }
 
-function startTimers() { 
-  clearTimers();
-  config.chimes.forEach(function(chime){
-    if(chime.interval_type == "standard") {
-      var secondsToFirstChime = nextMatchingSecond(chime.interval);
-      var text = "Every " + chime.interval + " minutes";
-      initChime(chime);
-      var firstChimeTimeout = setTimeout(function() { 
-        playDing(chime.ding);
-        var subsequentChimesInterval = setInterval(function() { 
-            playDing(chime.ding);      
-        }, chime.interval * 60 * 1000);
-        intervals.push({ firstChime : firstChimeTimeout, repeater : subsequentChimesInterval });
-      }, secondsToFirstChime * 1000);
-    }
-  });
+function setup(chimes){
+  setUpInterval();
+  setUpSounds();
 }
 
-startTimers();
+function startMusic(){
+  Chimer.start();
+}
+
+Chimer.onChimesChanged(displayActiveTimers);
+Chimer.onChimeAdded(chime => {
+  initAudio(chime);
+});
+Chimer.onChimeSound(function(chime){
+  try {
+    initAudio(chime).play();
+  }
+  catch (e){
+    console.log(e);
+  }
+});
+
+setTimeout(setup, 300); // because i miss $.ready();

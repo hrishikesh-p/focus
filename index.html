@@ -9,7 +9,71 @@
   <script src="scripts/app.js"></script>
 </head>
 <body>
-   <div class="breather-holder" id="breather-holder">
-   </div>
+  <div class="breather-holder" id="breather-holder">
+  </div>
+  <div class="menu"> 
+    <div class="icon-main icon-holder">
+      <div class="icon">
+        +
+      </div>
+    </div>
+    <ul class="menu-section">
+      <li>
+        <span class="icon-label">Custom</span>
+        <div class="icon-holder">
+          <div class="icon icon-hr"><a href="javascript:showForm()">&#8734;</a></div>
+        </div>
+      </li>
+      <li>
+        <span class="icon-label">Chime every hour</span>
+        <div class="icon-holder">
+          <div class="icon icon-hr"><a href="javascript:createChime('Flowing through time' , 60, chime_1h)">1h</a></div>
+        </div>
+      </li>
+      <li>
+        <span class="icon-label">Chime every 15mins</span>
+        <div class="icon-holder">
+          <div class="icon icon-15m"><a href="javascript:createChime('Pinky, Are you pondering, What I am pondering', 15, chime_15m)">15m</a></div>
+        </div>
+      </li>
+      <li>
+        <span class="icon-label">Chime every 5mins</span>
+        <div class="icon-holder">
+          <div class="icon icon-5m"><a href="javascript:createChime('Inhale! Exhale!', 5 )">5m</a></div>
+        </div>
+      </li>
+      <li>
+        <span class="icon-label">Chime every min</span>
+        <div class="icon-holder">
+          <div class="icon icon-5m" onclick="javascript:createChime('Breathe', 1, chime_1m)">1m</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="active-chimes" id="active-chimes"> 
+  </div>
+  <div class="toggle-form"> 
+    <form name="custom-chime-input" action="#">
+      <label>Name</label> 
+      <input type="text" name="chime-name" />
+      <br/>
+      <label>Chime every</label>
+      <select id="chime-interval" name="chime-interval">
+      </select>
+      <br/>
+      <label>Sound</label> <input type=checkbox name="chime-sound-enabled" />
+      <select id="chime-sound-key" name="chime-sound-key">
+      </select>
+      <br/>
+      <label>Blink Tab</label> 
+      <input type="checkbox" name="chime-blink-tab-enabled" />
+      <br/>
+      <label>Show Notification</label> 
+      <input type="checkbox" name="chime-show-notif-enabled" />
+      <br/>
+      <button onclick="javascript:addChime()"> Add </button>
+      <button onclick="javascript:hideForm()"> Close </button>
+    </form>
+  </div>
 </body>
 </html>
