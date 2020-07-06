@@ -1,5 +1,5 @@
 
-var blinkTab = function(message, times) {
+var blinkTabMsg = function(message, times) {
   var counter = 0;
   times = times || 5;
   var oldTitle = document.title,
@@ -69,13 +69,13 @@ function chimeAlert(text){
 
 function initAudio(chime) {
   var ding = chime.ding;
-  var audioElemId  = "audio-" + ding.sound_key;
+  var audioElemId  = "audio-" + ding.soundKey;
   var audioElem = document.getElementById(audioElemId);
   if(!audioElem){
     console.log("sound missing " + audioElemId);
     audioElem = document.createElement("audio");
     audioElem.id = audioElemId;
-    audioElem.src = "sounds/" + ding.sound_key +".ogg";
+    audioElem.src = "sounds/" + ding.soundKey +".ogg";
   }
   return audioElem;
 }
@@ -143,6 +143,7 @@ function setUpInterval(){
 function setup(chimes){
   setUpInterval();
   setUpSounds();
+  Chimer.start();
 }
 
 function startMusic(){
@@ -153,7 +154,7 @@ Chimer.onChimesChanged(displayActiveTimers);
 Chimer.onChimeAdded(chime => {
   initAudio(chime);
 });
-Chimer.onChimeSound(function(chime){
+Chimer.onPlayChime(function(chime){
   try {
     initAudio(chime).play();
   }
@@ -161,5 +162,54 @@ Chimer.onChimeSound(function(chime){
     console.log(e);
   }
 });
+
+Chimer.onDisplayChimeText(function(msg , blinkTab, notification){
+    chimeAlert(msg);
+
+    if(blinkTab){
+      blinkTabMsg(msg, 5);
+    }
+
+    if(notification){
+      notify(msg);
+    }
+});
+
+function showForm(){
+  document.getElementById("form-container").className += " active";
+  document.getElementById("custom-chime-form").reset();
+}
+
+function hideForm(){
+  console.log("Hiding form");
+  var formContainer = document.getElementById("form-container");
+  formContainer.classname = formContainer.className = "toggle-form"
+}
+
+function toggleSound(el){
+   document.getElementById("chime-sound-key").disabled = !el.checked;
+}
+
+function addChime(){
+  var name = document.getElementById("chime-name").value;
+  var interval = document.getElementById("chime-interval").value;
+  var playSound = document.getElementById("chime-sound-enabled").checked;
+  var blinkWindow = document.getElementById("chime-blinktab-enabled").checked;
+  var showNotification = document.getElementById("chime-notification-enabled").checked;
+  var chimeSoundKey = document.getElementById("chime-sound-key").value;
+  Chimer.add({
+    name: name,
+    interval : interval,
+    interval_type : "standard", 
+    ding : {
+      sound : playSound, 
+      soundKey : chimeSoundKey, 
+      notification : showNotification, 
+      blinkWindow : blinkWindow
+    }
+  });
+  notify("Added");
+  hideForm();
+}
 
 setTimeout(setup, 300); // because i miss $.ready();

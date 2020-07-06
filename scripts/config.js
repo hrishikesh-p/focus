@@ -1,8 +1,8 @@
 let config = { 
   default_ding : {
     sound : true,
-    sound_key : "chimes",
-    blink_window: true,
+    soundKey : "chimes",
+    blinkWindow: true,
   },
   sounds : [
     "all-cards-on-table",
@@ -27,40 +27,48 @@ let default_chimes = [{
   id : new Date().getTime(),
   name : "Breathe",
   interval : 5,
-  interval_type : "standard",
   ding : { 
     sound : true, 
-    sound_key : "chimes"
+    soundKey : "chimes"
   }
 }];
 
 var Chimer = {
   chimes : [],
-  intervals : [],
-  events : ["ChimeAdded" , "ChimeRemoved", "ChimesChanged", "InitCompleted", "FireChime", "ChimeSound"],
+  intervals : {},
+  events : ["ChimeAdded",
+            "ChimeRemoved",
+            "ChimesChanged",
+            "InitCompleted",
+            "FireChime",
+            "PlayChime",
+            "DisplayChimeText"],
   eventListeners : {}, 
   on : function(eventName, func){
     this.eventListeners[eventName].push(func);
   },
   emit : function(){
+    console.log(arguments);
     var eventName = Array.prototype.shift.apply(arguments);
     this.eventListeners[eventName].forEach(func => func.apply(null, arguments)); // TODO: might need to register listener with scope
   },
   init : function(){
     $this = this;
     this.events.forEach(event => {
-      this.eventListeners[event] = [];
-      this["on"+event] = function(func){
-        this.on(event, func);
+      $this.eventListeners[event] = [];
+      $this["on"+event] = function(func){
+        $this.on(event, func);
       };
     });
     return this;
   },
-  add : function(chime){
+  add : function(chime, delayChanges){
     chime.id = new Date().getTime();  
     this.chimes.push(chime);
     this.emit("ChimeAdded", chime);
-    this.applyChanges();
+    if(!delayChanges) {
+      this.applyChanges();
+    }
   },
   remove : function(chimeToRemove){
     if(chimeToRemove.id){
@@ -73,23 +81,28 @@ var Chimer = {
     }
   },
   load: function(){
+    $this = this;
     var existingChimes = JSON.parse(localStorage.getItem("chimes")) || default_chimes;
-    existingChimes.forEach(function(chime) { $this.add(chime) });
+    console.log("existing Chimes");
+    console.log(existingChimes);
+    existingChimes.forEach(function(chime) { $this.add(chime, true); });
     this.applyChanges();
   },
   applyChanges : function(){
     this.chimes.sort(function(chime1, chime2){
       var comparison = 0;
       if(chime1.interval == chime2.interval){
-        comparison = chime1.id < chime2.id ? 1 : -1;
+        comparison = chime1.id > chime2.id ? 1 : -1;
       }
       else {
-       comparison = chime1.interval > chime2.interval ? 1 : -1;
+       comparison = chime1.interval < chime2.interval ? 1 : -1;
       }
       return comparison;
     });
-    this.startTimers();
     localStorage.setItem("chimes" , JSON.stringify(this.chimes));
+    console.log("persisted data");
+    console.log(this.chimes);
+    this.startTimers();
     this.emit("ChimesChanged", this.chimes);
   },
   nextMatchingSecond: function(interval){ // interval is in minutes
@@ -103,31 +116,40 @@ var Chimer = {
     var nextMatchingSec = minutesToNextChime * 60 - seconds;
     return nextMatchingSec;
   },
-  clearTimers : function(){
-    this.intervals.forEach(function (interval){
-      clearTimeout(interval.firstChime);
-      clearInterval(interval.repeater);
-    });
-    this.intervals = [];
+  addTimer : function(chimeId, initialTimer, intervalTimer){
+    var timerInfo = null;
+     if(this.intervals[chimeId]){
+          timerInfo = this.intervals[chimeId];
+     }
+     else { 
+       timerInfo = {};
+
+     }
+    if(initialTimer){
+       if(timerInfo["initial"] ) {
+         clearTimeout(timerInfo.initial);
+       }
+      timerInfo.initial = initialTimer;
+    }
+
+    if(intervalTimer){
+      if(timerInfo["interval"]) {
+        clearInterval(timerInfo.interval);
+      }
+      timerInfo.interval = intervalTimer;
+    }
+    this.intervals[chimeId] = timerInfo;
   },
   fireChime: function(chime){
-    var name = chime.name;
-    var ding = chime.ding;
-    if(chime.blink_window){
-      blinkTab(name, 5);
-    }
     if(this.maxMatchingInterval(chime)){
-      this.emit("ChimeSound" , chime);
+      this.emit("PlayChime" , chime);
     }
     else {
       console.log("skipping audio as it is not the maxElement");
     }
-
-    chimeAlert(name);
-
-    if(chime.notification){
-      notify(chime.name);
-    }
+ 
+    this.emit("DisplayChimeText", chime.name,
+      chime.ding.blinkWindow, chime.ding.notification);
   },
   maxMatchingInterval: function(currentChime){
     var currentMinutes =  new Date().getMinutes();
@@ -138,18 +160,16 @@ var Chimer = {
   },
   startTimers : function() { 
     $this = this;
-    this.clearTimers();
     this.chimes.forEach(function(chime){
-      if(chime.interval_type == "standard") {
         var secondsToFirstChime = $this.nextMatchingSecond(chime.interval);
         var firstChimeTimeout = setTimeout(function() { 
           $this.fireChime(chime); // TODO : move these to events too
           var subsequentChimesInterval = setInterval(function() { 
             $this.fireChime(chime);      
           }, chime.interval * 60 * 1000);
-          $this.intervals.push({ firstChime : firstChimeTimeout, repeater : subsequentChimesInterval });
+          $this.addTimer(chime.id, null, subsequentChimesInterval);
         }, secondsToFirstChime * 1000);
-      }
+        $this.addTimer(chime.id, firstChimeTimeout);
     });
   }, 
   start : function(){
@@ -159,6 +179,6 @@ var Chimer = {
   }
 }.init();
 
-let chime_1m = { sound: true, sound_key: "your-turn" } 
-let chime_15m = { sound: true, sound_key: "all-cards-on-table" , notification: true , blink_window: true } 
-let chime_1h = { sound: true, sound_key: "piece-of-cake" , notification: true , blink_window: true } 
+let chime_1m = { sound: true, soundKey: "your-turn" } 
+let chime_15m = { sound: true, soundKey: "all-cards-on-table" , notification: true , blink_window: true } 
+let chime_1h = { sound: true, soundKey: "piece-of-cake" , notification: true , blink_window: true } 

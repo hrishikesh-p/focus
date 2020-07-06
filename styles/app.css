@@ -35,13 +35,13 @@ body {
   color : white;
 	border-radius: 50%;
 	box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
-	height: 300px;
-	width: 300px;
+	height: 200px;
+	width: 200px;
   text-align : center;
 	transform: scale(1);
   display: flex;
   flex-wrap: wrap;
-  align-content: space-around;
+  justify-content: space-around;
 	animation: pulse-breather 2s infinite;
 }
 
@@ -187,16 +187,33 @@ body {
   padding: 5px 
 }
 
+.toggle-form {
+  display : none;
+  width : 300px;
+  height: 50vh;
+  position : absolute;
+  z-index : 1000;
+  right:50px;
+}
+
 form { 
   border: 1px solid white;
   padding : 20px;
-  position : absolute;
-  right: 30px;
-  display : none;
-  height: 100vh;
+  background : black;
+  height : 100%;
+  width: 100%;
+}
+
+.toggle-form.active {
+  display: block;
 }
 
 label {
   color: white;
   text-size: 25px;
+}
+
+input, select, button {
+  padding : 1px;
+  margin : 10px; 
 }
