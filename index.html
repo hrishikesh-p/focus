@@ -19,6 +19,16 @@
 
 </head>
 <body>
+  <h2> Mindfulness Chime </h2>
+  <br/>
+  <br/>
+  <div class="description">
+    <p>Being mindful is hard, but practising mindfulness has great results. This chime generator helps those who need a little nudge to bring their mind back to the present and be more aware of what they are doing. Especially when you can get distracted online very easily</p>
+    <p>The Mindfullness Chime allows you to experience time in a very different way. Each time the chime goes off , you can use that signal to bring your focus back to what you were doing. As you start experience time in terms of chimes, you will realize the passing of time feel slower or faster based on what you are doing. Realize the time interval expand or contract based on your interest.</p>
+    <p>You can use it for meditation as meditation bell. Or for mindfulness while you work on something else. </p>
+    <br/>
+    <p> Be Mindful. Be Self Aware.</p>
+  </div>
   <div class="breather-holder" id="breather-holder">
   </div>
   <div class="menu"> 
@@ -37,25 +47,25 @@
       <li>
         <span class="icon-label">Chime every hour</span>
         <div class="icon-holder">
-          <div class="icon icon-hr" onclick="javascript:createChime('Flowing through time' , 60, chime_1h)">1h</div>
+          <div class="icon icon-hr" onclick="javascript:createChime('Move, Drink water' , 60, chime_1h)">1h</div>
+        </div>
+      </li>
+      <li>
+        <span class="icon-label">Chime every half hour</span>
+        <div class="icon-holder">
+          <div class="icon icon-5m" onclick="javascript:createChime('Pinky, Are you pondering, What I am pondering?', 30, chime_30m)">30m</div>
         </div>
       </li>
       <li>
         <span class="icon-label">Chime every 15mins</span>
         <div class="icon-holder">
-          <div class="icon icon-15m" onclick="javascript:createChime('Pinky, Are you pondering, What I am pondering', 15, chime_15m)">15m</div>
+          <div class="icon icon-15m" onclick="javascript:createChime('Inhale! Exhale!', 15, chime_15m)">15m</div>
         </div>
       </li>
       <li>
         <span class="icon-label">Chime every 5mins</span>
         <div class="icon-holder">
-          <div class="icon icon-5m" onclick="javascript:createChime('Inhale! Exhale!', 5 )">5m</div>
-        </div>
-      </li>
-      <li>
-        <span class="icon-label">Chime every min</span>
-        <div class="icon-holder">
-          <div class="icon icon-5m" onclick="javascript:createChime('Breathe', 1, chime_1m)">1m</div>
+          <div class="icon icon-5m" onclick="javascript:createChime('Breathe', 5 )">5m</div>
         </div>
       </li>
     </ul>
@@ -72,7 +82,7 @@
       </select>
       <br/>
       <label>Play Sound</label> <input type=checkbox id="chime-sound-enabled" onchange="javascript:toggleSound(this)" />
-      <select id="chime-sound-key" name="chime-sound-key">
+      <select id="chime-sound-key" name="chime-sound-key" onchange="javacript:playSampleSound(this)">
       </select>
       <br/>
       <label>Blink Tab</label> 

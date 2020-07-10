@@ -34,6 +34,7 @@ let default_chimes = [{
 }];
 
 var Chimer = {
+  prevId : -1,
   chimes : [],
   intervals : {},
   events : ["ChimeAdded",
@@ -62,8 +63,15 @@ var Chimer = {
     });
     return this;
   },
+  getId: function(){
+    var id = new Date().getTime();
+    if(this.prevId == id ) {
+      id = id+1;
+    }
+    return id++;
+  },
   add : function(chime, delayChanges){
-    chime.id = new Date().getTime();  
+    chime.id = chime.id || this.getId();
     this.chimes.push(chime);
     this.emit("ChimeAdded", chime);
     if(!delayChanges) {
@@ -83,8 +91,6 @@ var Chimer = {
   load: function(){
     $this = this;
     var existingChimes = JSON.parse(localStorage.getItem("chimes")) || default_chimes;
-    console.log("existing Chimes");
-    console.log(existingChimes);
     existingChimes.forEach(function(chime) { $this.add(chime, true); });
     this.applyChanges();
   },
@@ -100,7 +106,6 @@ var Chimer = {
       return comparison;
     });
     localStorage.setItem("chimes" , JSON.stringify(this.chimes));
-    console.log("persisted data");
     console.log(this.chimes);
     this.startTimers();
     this.emit("ChimesChanged", this.chimes);
@@ -149,7 +154,7 @@ var Chimer = {
     }
  
     this.emit("DisplayChimeText", chime.name,
-      chime.ding.blinkWindow, chime.ding.notification);
+      chime.ding.blinkWindow, chime.ding.notification, chime);
   },
   maxMatchingInterval: function(currentChime){
     var currentMinutes =  new Date().getMinutes();
@@ -179,6 +184,7 @@ var Chimer = {
   }
 }.init();
 
-let chime_1m = { sound: true, soundKey: "your-turn" } 
-let chime_15m = { sound: true, soundKey: "all-cards-on-table" , notification: true , blink_window: true } 
-let chime_1h = { sound: true, soundKey: "piece-of-cake" , notification: true , blink_window: true } 
+let chime_5m = { sound: true, soundKey: "knob" } 
+let chime_15m = { sound: true, soundKey: "your-turn", blink_window: true } 
+let chime_30m = { sound: true, soundKey: "reload" , notification: true , blink_window: true } 
+let chime_1h = { sound: true, soundKey: "chimes" , notification: true , blink_window: true } 

@@ -13,7 +13,7 @@ var blinkTabMsg = function(message, times) {
     },
     clear = function() {
       clearInterval(timeoutId);
-      document.title = oldTitle;
+      document.title = "Stay Mindful";
       window.onmousemove = null;
       timeoutId = null;
     };
@@ -49,33 +49,29 @@ function randomMargin(elem , width , height) {
   elem.style.margin = "" + topMargin + "px 10px 10px "+ leftMargin+"px"; 
 }
 
-function chimeAlert(text){
+function chimeAlert(text, color){
   var container = document.createElement("div");
   container.className="chime-alert";
+  container.style.backgroundColor=color 
   var textContainer = document.createElement("div");
   textContainer.className = "chime-text"
   textContainer.innerHTML = text;
   container.appendChild(textContainer);
   randomMargin(container);
-  console.log("container" + container);
-  console.log(container.outerHTML);
   var holder = document.getElementById("breather-holder");
   holder.appendChild(container);
   setTimeout(function() { 
-    console.log(holder.outerHTML);
     holder.removeChild(container);
   }, 5000);
 }
 
-function initAudio(chime) {
-  var ding = chime.ding;
-  var audioElemId  = "audio-" + ding.soundKey;
+function initAudio(soundKey) {
+  var audioElemId  = "audio-" + soundKey;
   var audioElem = document.getElementById(audioElemId);
   if(!audioElem){
-    console.log("sound missing " + audioElemId);
     audioElem = document.createElement("audio");
     audioElem.id = audioElemId;
-    audioElem.src = "sounds/" + ding.soundKey +".ogg";
+    audioElem.src = "sounds/" + soundKey +".ogg";
   }
   return audioElem;
 }
@@ -125,6 +121,7 @@ function setUpSounds(){
      soundOptionElem.value = soundName;
      soundOptionElem.innerHTML = soundName;
      soundSelectElem.appendChild(soundOptionElem);
+     initAudio(soundName);
    });
 }
 
@@ -152,19 +149,41 @@ function startMusic(){
 
 Chimer.onChimesChanged(displayActiveTimers);
 Chimer.onChimeAdded(chime => {
-  initAudio(chime);
+  initAudio(chime.ding.soundKey);
 });
 Chimer.onPlayChime(function(chime){
   try {
-    initAudio(chime).play();
+    initAudio(chime.ding.soundKey).play();
   }
   catch (e){
     console.log(e);
   }
 });
+ 
+var chimeColors = {};
 
-Chimer.onDisplayChimeText(function(msg , blinkTab, notification){
-    chimeAlert(msg);
+var RandomColor = {
+    allColors : ['blue' , 'green' , 'teal' , 'lime' , 'red', 'orange'],
+    colorList : [],
+    nextColor : function(){
+      if(this.colorList.length == 0){
+        this.colorList = this.allColors.slice(); 
+      }
+      var colorPos = Math.floor(Math.random() * this.colorList.length); 
+      var colorAssigned = this.colorList.splice(colorPos,1);
+      return colorAssigned[0]; 
+    }
+}
+
+function chimeColor(id){
+  if(!chimeColors[id]){
+    chimeColors[id] = RandomColor.nextColor();
+  }
+  return chimeColors[id];
+}
+
+Chimer.onDisplayChimeText(function(msg , blinkTab, notification, chime){
+    chimeAlert(msg, chimeColor(chime.id));
 
     if(blinkTab){
       blinkTabMsg(msg, 5);
@@ -181,13 +200,17 @@ function showForm(){
 }
 
 function hideForm(){
-  console.log("Hiding form");
   var formContainer = document.getElementById("form-container");
   formContainer.classname = formContainer.className = "toggle-form"
 }
 
 function toggleSound(el){
    document.getElementById("chime-sound-key").disabled = !el.checked;
+}
+
+function playSampleSound(el){
+  var soundKey= el.value;
+  initAudio(soundKey).play();
 }
 
 function addChime(){
