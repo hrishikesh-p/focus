@@ -5,7 +5,7 @@
 
 body {
   font-family: Lato,sans-serif;
-  background: black;
+  background: #1c1e21;
   display: flex;
   align-items : center;
   flex-direction : column;
@@ -17,16 +17,16 @@ body {
 
 @keyframes pulse-body {
   0% {
-    background-color: black;
+    background-color: #1c1e21;
   }
   10% {
     background-color: white;
   }
   20% {
-    background-color: black;
+    background-color: #1c1e21;
   }
   100% { 
-    background-color: black;
+    background-color: #1c1e21;
   }
 }
 
@@ -110,7 +110,7 @@ body {
 
   height: 100%;
   font-size: 15px;
-  color : black;
+  color : #1c1e21;
   text-decoration: none;
 }
 
@@ -183,7 +183,7 @@ body {
 }
 
 .chime-desc-container a {
-  color:black;
+  color:#1c1e21;
   width: 10px;
   height: 10px;
 }
@@ -212,7 +212,7 @@ body {
 form { 
   border: 1px solid white;
   padding : 20px;
-  background : black;
+  background : #1c1e21;
   height : 100%;
   width: 100%;
 }
@@ -241,9 +241,8 @@ h2, h1 {
 }
 
 .description { 
-  border: 1px solid white;
   padding : 15px;
-  background : black;
+  background : #1c1e21;
   width : 80%;
 }
 
