@@ -122,7 +122,12 @@ body {
 .icon-main { 
   height: 60px;
   width: 60px;
-  background: blue;
+  background: grey;
+}
+
+.icon-add {
+  font-size : 30px;
+  font-weight: bold;
 }
 
 .menu-section { 
@@ -189,9 +194,9 @@ body {
 
 .chime-desc {
   display: flex;
-  color: white;
+  color: #c2c3c4;
   border-left : 1px solid white;
-  padding: 5px 
+  padding: 5px 15px 5px 15px;
 }
 
 .toggle-form {
@@ -242,8 +247,10 @@ h2, h1 {
 }
 
 .description p {
-  color : white;
+  color : #cdcfd1;
   font-size : 20px;
+  font-weight : italic;
+  letter-spacing : 0.1em;
   padding: 10px;
 }
 
