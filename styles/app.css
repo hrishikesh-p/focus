@@ -13,7 +13,6 @@ body {
   justify-content: space-around;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
-	/*animation: pulse-body 10s infinite;*/
 }
 
 @keyframes pulse-body {
@@ -122,12 +121,14 @@ body {
 .icon-main { 
   height: 60px;
   width: 60px;
-  background: grey;
+  background: skyblue;
+	animation: pulse-breather 3s infinite;
 }
 
 .icon-add {
   font-size : 30px;
   font-weight: bold;
+  border-radius: 100%;
 }
 
 .menu-section { 
