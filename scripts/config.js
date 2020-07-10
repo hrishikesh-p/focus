@@ -7,31 +7,33 @@ let config = {
   sounds : [
     "all-cards-on-table",
     "awareness",
-    "cause-and-effect",
     "chimes",
-    "engine",
     "filling-your-inbox",
     "gesture",
     "knob",
-    "oringz-w447",
     "piece-of-cake",
     "reload",
+    "sharp",
     "scratch",
-    "shield",
+    "your-turn", 
+    "beyond-doubt",
+    "falling-into-place",
+    "goes-without-saying",
+    "hide-and-seek",
+    "just-saying",
+    "open-up",
+    "pristine",
+    "quite-impressed",
+    "relentless",
+    "cause-and-effect",
     "springy",
-    "your-turn" 
+    "engine",
+    "oringz-w447",
+    "shield"
   ]
 }
 
-let default_chimes = [{
-  id : new Date().getTime(),
-  name : "Breathe",
-  interval : 5,
-  ding : { 
-    sound : true, 
-    soundKey : "chimes"
-  }
-}];
+let default_chimes = [];
 
 var Chimer = {
   prevId : -1,

@@ -194,9 +194,28 @@ Chimer.onDisplayChimeText(function(msg , blinkTab, notification, chime){
     }
 });
 
+function showTour(){
+  var tourElem =  document.getElementById("tour-dialog-container");
+  if(Chimer.chimes.length == 0) { // first Run
+    if(tourElem){
+      tourElem.style.display = "block";
+    }
+  }
+  else {
+    if(tourElem){
+      tourElem.style.display = "none";
+    }
+  }
+}
+
+Chimer.onInitCompleted(showTour);
+Chimer.onChimesChanged(showTour);
+
 function showForm(){
   document.getElementById("form-container").className += " active";
   document.getElementById("custom-chime-form").reset();
+  document.getElementById("chime-sound-enabled").checked=true;
+  document.querySelector("#chime-sound-key option[value=chimes]").selected = true;
 }
 
 function hideForm(){
