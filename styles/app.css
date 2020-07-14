@@ -25,7 +25,7 @@ body {
   20% {
     background-color: #1c1e21;
   }
-  100% { 
+  100% {
     background-color: #1c1e21;
   }
 }
@@ -46,7 +46,7 @@ body {
 	animation: pulse-breather 2s infinite;
 }
 
-.chime-text { 
+.chime-text {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -64,12 +64,12 @@ body {
 		transform: scale(0.95);
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
 	}
-	
+
 	70% {
 		transform: scale(1.1);
     box-shadow: 0 0 40px 0 rgba(255, 255, 255, 0.2);
 	}
-	
+
 	100% {
 		transform: scale(0.95);
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
@@ -82,7 +82,7 @@ body {
   border: 4px solid red;
 }
 
-.menu { 
+.menu {
   position: fixed;
   bottom: 80px;
   right : 30px;
@@ -118,7 +118,7 @@ body {
   text-decoration : none;
 }
 
-.icon-main { 
+.icon-main {
   height: 60px;
   width: 60px;
   background: skyblue;
@@ -129,9 +129,11 @@ body {
   font-size : 30px;
   font-weight: bold;
   border-radius: 100%;
+  position: relative;
+  bottom: 2px;
 }
 
-.menu-section { 
+.menu-section {
   list-style-type: none;
   margin: 0;
 
@@ -142,7 +144,7 @@ body {
 
   transition: all 0.3s ease;
   transform: scale(0);
-  transform-origin: 85% bottom; 
+  transform-origin: 85% bottom;
 }
 
 .menu-section li {
@@ -157,7 +159,7 @@ body {
   user-select: none;
   white-space: nowrap;
   border-radius : 3px;
-  font-size : 12px; 
+  font-size : 12px;
   color: white;
   margin-right: 10px;
 }
@@ -167,8 +169,8 @@ body {
   transform: scale(1);
 }
 
-.active-chimes { 
-  position: fixed; 
+.active-chimes {
+  position: fixed;
   bottom : 10px;
   right : 10px;
   display: flex;
@@ -209,7 +211,7 @@ body {
   bottom: 100px;
 }
 
-form { 
+form {
   border: 1px solid white;
   padding : 20px;
   background : #1c1e21;
@@ -223,13 +225,11 @@ form {
 
 label {
   color: white;
-  text-size: 30px;
 }
 
 input, select, button {
   padding : 1px;
-  margin : 10px; 
-  text-size: 30px;
+  margin : 10px;
   font-size: 15px;
 }
 
@@ -240,7 +240,7 @@ h2, h1 {
   padding : 20px;
 }
 
-.description { 
+.description {
   margin : 10px;
   background : #1c1e21;
   display: flex;
@@ -265,7 +265,7 @@ h2, h1 {
   justify-content : space-evenly;
 }
 
-.about { 
+.about {
   color: #cdcfd1;
   position: absolute;
   left : 30px;
@@ -286,7 +286,7 @@ h2, h1 {
   display:block;
 }
 
-.about a { 
+.about a {
   color: #cdcfd1;
 }
 
@@ -321,7 +321,7 @@ h2, h1 {
 
 .tour-dialog .close-dialog {
   content: "x";
-  float:left; 
+  float:left;
   top: 10px;
   position: relative;
 }
