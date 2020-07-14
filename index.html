@@ -1,60 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Mindfulness Chime</title>
-  <meta name="description" content="Mindfulness bells , Awakening bells or Mindfulness Chimes provide you nudges to stay mindful while you are at the computer.">
-  <link rel="stylesheet" href="styles/app.css">
-  <script src="scripts/config.js"></script>
-  <script src="scripts/element.js"></script>
-  <script src="scripts/app.js"></script>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-2602800-3"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <meta name="description"
+    content="Mindfulness bells , Awakening bells or Mindfulness Chimes provide you nudges to stay mindful while you are at the computer.">
 
-  gtag('config', 'UA-2602800-3');
-</script>
+  <link rel="stylesheet" href="styles/app.css">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2602800-3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-2602800-3');
+  </script>
 
 </head>
+
 <body>
   <div class="content">
     <h2> Mindfulness Chime </h2>
-    <br/>
-    <br/>
+    <br />
+    <br />
     <div class="description">
-      <p>This Mindfulness Chime helps you with a gentle nudge to bring your mind back to the present and be more aware of what you are doing. Especially when you can be easily distracted online.</p>
-      <p>Setup a recurring bell it will alert you with a chime or sound and optionally a notification. You can setup different sounds for different intervals and realize time flowing in your own way.</p>
-      <p>Being mindful is hard. This Mindfulness Bell / Chime is a small tool to help you reap its benefits. Hope you find this useful!</p>
+      <p>This Mindfulness Chime helps you with a gentle nudge to bring your mind back to the present and be more aware
+        of what you are doing. Especially when you can be easily distracted online.</p>
+      <p>Setup a recurring bell it will alert you with a chime or sound and optionally a notification. You can setup
+        different sounds for different intervals and realize time flowing in your own way.</p>
+      <p>Being mindful is hard. This Mindfulness Bell / Chime is a small tool to help you reap its benefits. Hope you
+        find this useful!</p>
     </div>
     <div class="breather-holder" id="breather-holder">
     </div>
   </div>
   <div class="about">
     <div class="about-content">
-      <p>Creative Commons Attributions</p><br/>
-        <ul> 
-          <li>Fav Icons made by <a href="https://www.flaticon.com/authors/ultimatearm" title="ultimatearm">ultimatearm</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a></li>
-          <li>Sound files from <a href="https://notificationsounds.com/">Notification Sounds</a></li>
-        </ul><br/><br/>
-        <p>I wrote the first version to generate a recurring sound to keep the connection alive to my bluetooth speaker. <br/>
-        As a side effect, realized the chime sounds improved my focus and helped me stay on track.<br/>
-        Now I use this a lot, so decided to share!</p><br/>
-        <p>Why not an extension ? Pinning this as tab makes it easy to keep it running all the time and makes it easy to mute / unmute the tab. </p>
-        <p>Website by <a href="https://twitter.com/D1NamedRex">Hrishikesh</a></p>
+      <p>Creative Commons Attributions</p><br />
+      <ul>
+        <li>Fav Icons made by <a href="https://www.flaticon.com/authors/ultimatearm" title="ultimatearm">ultimatearm</a>
+          from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a></li>
+        <li>Sound files from <a href="https://notificationsounds.com/">Notification Sounds</a></li>
+      </ul><br /><br />
+      <p>I wrote the first version to generate a recurring sound to keep the connection alive to my bluetooth speaker.
+        <br />
+        As a side effect, realized the chime sounds improved my focus and helped me stay on track.<br />
+        Now I use this a lot, so decided to share!</p><br />
+      <p>Why not an extension ? Pinning this as tab makes it easy to keep it running all the time and makes it easy to
+        mute / unmute the tab. </p>
+      <p>Website by <a href="https://twitter.com/D1NamedRex">Hrishikesh</a></p>
     </div>
     <span> &#9432; </span>
   </div>
   <div id="tour-dialog-container" class="tour-dialog-container">
     <div class="tour-dialog">
       <div class="title">Get started here</div>
-      <div class="content">Add a chime. <br/> Hear the time.</div>
+      <div class="content">Add a chime. <br /> Hear the time.</div>
     </div>
     <div class="arrow"> </div>
   </div>
-  <div class="menu"> 
+  <div class="menu">
     <div class="icon-main icon-holder">
       <div class="icon icon-add">
         +
@@ -76,7 +87,8 @@
       <li>
         <span class="icon-label">Chime every half hour</span>
         <div class="icon-holder">
-          <div class="icon icon-5m" onclick="javascript:createChime('Pinky, Are you pondering, What I am pondering?', 30, chime_30m)">30m</div>
+          <div class="icon icon-5m"
+            onclick="javascript:createChime('Pinky, Are you pondering, What I am pondering?', 30, chime_30m)">30m</div>
         </div>
       </li>
       <li>
@@ -93,30 +105,34 @@
       </li>
     </ul>
   </div>
-  <div class="active-chimes" id="active-chimes"> 
+  <div class="active-chimes" id="active-chimes">
   </div>
-  <div id="form-container" class="toggle-form"> 
+  <div id="form-container" class="toggle-form">
     <form name="custom-chime-input" action="#" id="custom-chime-form">
-      <label>Name</label> 
+      <label>Name</label>
       <input type="text" name="chime-name" id="chime-name" />
-      <br/>
+      <br />
       <label>Chime every</label>
       <select id="chime-interval" name="chime-interval">
       </select>
-      <br/>
+      <br />
       <label>Play Sound</label> <input type=checkbox id="chime-sound-enabled" onchange="javascript:toggleSound(this)" />
       <select id="chime-sound-key" name="chime-sound-key" onchange="javacript:playSampleSound(this)">
       </select>
-      <br/>
-      <label>Blink Tab</label> 
+      <br />
+      <label>Blink Tab</label>
       <input type="checkbox" id="chime-blinktab-enabled" />
-      <br/>
-      <label>Show Notification</label> 
+      <br />
+      <label>Show Notification</label>
       <input type="checkbox" id="chime-notification-enabled" />
-      <br/>
-      <button type="button"  onclick="javascript:addChime()"> Add </button>
-      <button  type="button" onclick="javascript:hideForm()"> Close </button>
+      <br />
+      <button type="button" onclick="javascript:addChime()"> Add </button>
+      <button type="button" onclick="javascript:hideForm()"> Close </button>
     </form>
   </div>
+
+  <script src="scripts/config.js"></script>
+  <script src="scripts/app.js"></script>
 </body>
+
 </html>
