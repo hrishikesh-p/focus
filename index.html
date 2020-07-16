@@ -37,6 +37,9 @@
       <p>Being mindful is hard. This Mindfulness Bell / Chime is a small tool to help you reap its benefits. Hope you
         find this useful!</p>
     </div>
+    <div id="play-button" class="play-button" onclick="javacript:startMusic()">
+      <div class="symbol"> </div>
+    </div>
     <div class="breather-holder" id="breather-holder">
     </div>
   </div>
@@ -61,7 +64,7 @@
   <div id="tour-dialog-container" class="tour-dialog-container">
     <div class="tour-dialog">
       <div class="title">Get started here</div>
-      <div class="content">Add a chime. <br /> Hear the time.</div>
+      <div class="tour-content">Add a chime. <br /> Hear the time.</div>
     </div>
     <div class="arrow"> </div>
   </div>
@@ -134,5 +137,7 @@
   <script src="scripts/config.js"></script>
   <script src="scripts/app.js"></script>
 </body>
-
+<script>
+  setup();
+</script>
 </html>

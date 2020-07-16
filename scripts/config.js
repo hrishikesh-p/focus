@@ -78,6 +78,7 @@ var Chimer = {
     this.emit("ChimeAdded", chime);
     if(!delayChanges) {
       this.applyChanges();
+      this.startTimers();
     }
   },
   remove : function(chimeToRemove){
@@ -93,7 +94,7 @@ var Chimer = {
   load: function(){
     $this = this;
     var existingChimes = JSON.parse(localStorage.getItem("chimes")) || default_chimes;
-    existingChimes.forEach(function(chime) { $this.add(chime, true); });
+    existingChimes.forEach(function(chime) { chime.status = "inactive" ; $this.add(chime, true); });
     this.applyChanges();
   },
   applyChanges : function(){
@@ -109,7 +110,6 @@ var Chimer = {
     });
     localStorage.setItem("chimes" , JSON.stringify(this.chimes));
     console.log(this.chimes);
-    this.startTimers();
     this.emit("ChimesChanged", this.chimes);
   },
   nextMatchingSecond: function(interval){ // interval is in minutes
@@ -168,6 +168,7 @@ var Chimer = {
   startTimers : function() { 
     $this = this;
     this.chimes.forEach(function(chime){
+        chime.status = "playing";
         var secondsToFirstChime = $this.nextMatchingSecond(chime.interval);
         var firstChimeTimeout = setTimeout(function() { 
           $this.fireChime(chime); // TODO : move these to events too
@@ -178,11 +179,15 @@ var Chimer = {
         }, secondsToFirstChime * 1000);
         $this.addTimer(chime.id, firstChimeTimeout);
     });
+    this.emit("ChimesChanged", this.chimes);
   }, 
   start : function(){
     this.load();
     this.emit("InitCompleted", this.chimes );
     this.emit("ChimesChanged", this.chimes);
+  },
+  isInactive: function(){
+    return this.chimes.filter(function(chime) { return chime.status == "inactive";}).length == 0 ;
   }
 }.init();
 

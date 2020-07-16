@@ -94,7 +94,7 @@ function displayActiveTimers(chimes){
     var chimeContainer = document.createElement("div");
     chimeContainer.className = "chime-desc-container"; 
     var chimeText = document.createElement("span");
-    chimeText.className = "chime-desc"; 
+    chimeText.className = "chime-desc " + chime.status; 
     chimeText.innerHTML = chimeDesription(chime);
     var chimeRemove = document.createElement("a");
     chimeRemove.onclick = function() {
@@ -137,28 +137,7 @@ function setUpInterval(){
   }
 }
 
-function setup(chimes){
-  setUpInterval();
-  setUpSounds();
-  Chimer.start();
-}
 
-function startMusic(){
-  Chimer.start();
-}
-
-Chimer.onChimesChanged(displayActiveTimers);
-Chimer.onChimeAdded(chime => {
-  initAudio(chime.ding.soundKey);
-});
-Chimer.onPlayChime(function(chime){
-  try {
-    initAudio(chime.ding.soundKey).play();
-  }
-  catch (e){
-    console.log(e);
-  }
-});
  
 var chimeColors = {};
 
@@ -182,34 +161,30 @@ function chimeColor(id){
   return chimeColors[id];
 }
 
-Chimer.onDisplayChimeText(function(msg , blinkTab, notification, chime){
-    chimeAlert(msg, chimeColor(chime.id));
+function showPlayButton(){
+  var playButton =  document.getElementById("play-button");
+  playButton.style.display = "flex";
+}
 
-    if(blinkTab){
-      blinkTabMsg(msg, 5);
-    }
-
-    if(notification){
-      notify(msg);
-    }
-});
+function hidePlayButton(){
+  var playButton =  document.getElementById("play-button");
+  playButton.style.display = "none";
+}
 
 function showTour(){
   var tourElem =  document.getElementById("tour-dialog-container");
   if(Chimer.chimes.length == 0) { // first Run
-    if(tourElem){
-      tourElem.style.display = "block";
-    }
+    tourElem.style.display = "block";
+    hidePlayButton();
   }
   else {
-    if(tourElem){
-      tourElem.style.display = "none";
+    tourElem.style.display = "none";
+    if(!Chimer.isInactive()){
+      showPlayButton();
     }
   }
 }
 
-Chimer.onInitCompleted(showTour);
-Chimer.onChimesChanged(showTour);
 
 function showForm(){
   document.getElementById("form-container").className += " active";
@@ -250,8 +225,48 @@ function addChime(){
       blinkWindow : blinkWindow
     }
   });
-  notify("Added");
+  if( showNotification) {
+    notify("Added");
+  }
   hideForm();
 }
 
-setTimeout(setup, 300); // because i miss $.ready();
+Chimer.onDisplayChimeText(function(msg , blinkTab, notification, chime){
+    chimeAlert(msg, chimeColor(chime.id));
+
+    if(blinkTab){
+      blinkTabMsg(msg, 5);
+    }
+
+    if(notification){
+      notify(msg);
+    }
+});
+
+Chimer.onInitCompleted(showTour);
+Chimer.onChimesChanged(showTour);
+
+Chimer.onChimesChanged(displayActiveTimers);
+Chimer.onChimeAdded(chime => {
+  initAudio(chime.ding.soundKey);
+});
+
+Chimer.onPlayChime(function(chime){
+  try {
+    initAudio(chime.ding.soundKey).play();
+  }
+  catch (e){
+    console.log(e);
+  }
+});
+
+function startMusic(){
+  Chimer.startTimers();
+  hidePlayButton();
+}
+
+function setup(){
+  setUpInterval();
+  setUpSounds();
+  Chimer.start();
+}

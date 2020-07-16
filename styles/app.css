@@ -3,7 +3,7 @@
   opacity: 1;
 }
 
-body {
+body, .content {
   font-family: Lato,sans-serif;
   background: #1c1e21;
   display: flex;
@@ -106,7 +106,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  vertical-align: middle;
 
   height: 100%;
   font-size: 15px;
@@ -122,7 +121,6 @@ body {
   height: 60px;
   width: 60px;
   background: skyblue;
-	animation: pulse-breather 3s infinite;
 }
 
 .icon-add {
@@ -202,6 +200,10 @@ body {
   padding: 5px 15px 5px 15px;
 }
 
+.chime-desc.playing {
+  color: #77dd77; 
+}
+
 .toggle-form {
   display : none;
   width : 330px;
@@ -256,6 +258,29 @@ h2, h1 {
   padding: 10px 100px 10px 100px ;
 }
 
+
+.play-button {
+  width:100px;
+  height:100px;
+  display: flex;
+  justify-content : space-around;
+  align-items: center;
+  border-radius: 50%;
+  margin : 30px;
+  box-shadow: 0 0 40px 0 rgba(255, 255, 255, 0.2);
+	animation: pulse-breather 10s infinite;
+}
+
+.play-button .symbol { 
+  content : "  ";
+  height:0px;
+  width:0px;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 43px solid white;
+  margin-left:10px;
+}
+
 .breather-holder {
   margin: 20px;
   padding: 20px;
@@ -306,17 +331,20 @@ h2, h1 {
   display: none;
 }
 
-.tour-dialog-container .arrow {
+.tour-dialog-container  .arrow{
+  position:relative;
+  left:305px;
+  bottom:50px;
+  float:left;
+}
+
+.arrow {
   content : "  ";
   height:0px;
   width:0px;
   border-top: 20px solid transparent;
   border-bottom: 20px solid transparent;
   border-left: 30px solid white;
-  position:relative;
-  left:305px;
-  bottom:50px;
-  float:left;
 }
 
 .tour-dialog .close-dialog {
@@ -333,7 +361,7 @@ h2, h1 {
   color: red;
 }
 
-.tour-dialog .content {
+.tour-dialog .tour-content {
   border: 0px;
   padding: 0px;
   width: 100%;
